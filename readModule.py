@@ -59,7 +59,28 @@ def read_graph(digraph_file_name):
 def value_search(V_coord, lat, lon):
     """
     reverse dictionary lookup - finds the key given value
+    if no key exists, returns nearest key as defined by cost function
+    >>> V_coord = {1: (2,2), 2:(3,4), 3:(6,2)}
+    >>> value_search(V_coord, 3, 4) == 2
+    True
+    >>> value_search(V_coord, 3, 2) == 1
+    True
+
     """
+    key = 0
+    minimum = 1000
+
+    # finds lat/lon if in V_coord
     for k,v in V_coord.items():
         if v == (lat, lon):
-            return k
+            key = k
+
+    # finds closest vertex if lat/lon not in V_coord
+    if key == 0:
+        for k,v in V_coord.items():
+            distance = ((lat - v[0])**2 + (lon - v[1])**2)**.5
+            if distance < minimum:
+                minimum = distance
+                key = k
+
+    return key
