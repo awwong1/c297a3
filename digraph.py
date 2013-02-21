@@ -165,6 +165,8 @@ class Digraph:
         False
         >>> G.is_path(1)
         False
+        >>> G.is_path([1, 3])
+        False
         """
          # If not a valid list, return false
         if type(path) != list:
@@ -249,6 +251,57 @@ def shortest_path(G, source, dest):
     [1, 6, 7]
     >>> G.is_path(path)
     True
+
+    >>> G = Digraph([(1, 2), (2, 3), (3, 4), (1, 5), (6, 7), (7, 8), (4, 6)])
+    >>> path = shortest_path(G, 1, 8)
+    >>> path
+    [1, 2, 3, 4, 6, 7, 8]
+    >>> G.is_path(path)
+    True
+
+    This should return nothing, because of directionality
+    >>> G = Digraph([(-4, -5), (53, 5), (5, -5)])
+    >>> path = shortest_path(G, -4, 53)
+    >>> path
+    >>> G.is_path(path)
+    False
+
+    However, this is okay
+    >>> G = Digraph([(-4, -5), (53, 5), (-5, 5), (5, 53)])
+    >>> path = shortest_path(G, -4, 53)
+    >>> path
+    [-4, -5, 5, 53]
+    >>> G.is_path(path)
+    True
+    
+    These two paths have 2 different paths of the same distance
+    >>> G = Digraph([(1, 2), (1, 3), (2, 4), (3, 4)])
+    >>> path = shortest_path(G, 1, 4)
+    >>> path
+    [1, 2, 4]
+    >>> G.is_path(path)
+    True
+
+    This one still picks [1, 2, 4] instead of [1, 3, 4] for some reason (still correct)
+    >>> G = Digraph([(1, 3), (1, 2), (3, 4), (2, 4)])
+    >>> path = shortest_path(G, 1, 4)
+    >>> path
+    [1, 2, 4]
+    >>> G.is_path(path)
+    True
+
+    These should return nothing
+    >>> G = Digraph([(1, 2), (1, 3), (7, 10)])
+    >>> path = shortest_path(G, 1, 10)
+    >>> path
+    >>> G.is_path(path)
+    False
+
+    >>> G = Digraph([(1, 2), (2, 3), (3, 4), (1, 5), (6, 7), (7, 8)])
+    >>> path = shortest_path(G, 1, 8)
+    >>> path
+    >>> G.is_path(path)
+    False
     """
     parent = {}
     queue = []
@@ -283,11 +336,60 @@ def least_cost_path(G, start, dest, cost):
     if there is no path, then returns None
     the path from start to start is [start]
 
+    The following test cases should emulate shortest_path
+
+    >>> G = Digraph();
+    >>> def testcost(e): return 1
+    
+    Empty Digraph, should return no path
+    >>> least_cost_path(G, 1, 2, testcost) == None
+    True
+
+    Path created from vertex 1 to 2, edge created
+    >>> G.add_edge((1, 2))
+    >>> a = least_cost_path(G, 1, 2, testcost)
+    >>> a == [1, 2]
+    True
+
+    >>> b = least_cost_path(G, 2, 1, testcost)
+    >>> b == None
+    True
+    
+    >>> G.add_edge((2, 3))
+    >>> c = least_cost_path(G, 1, 3, testcost)
+    >>> c == [1, 2, 3]
+    True
+
+    >>> G.add_edge((3, 4))
+    >>> G.add_edge((2, 4))
+    >>> d = least_cost_path(G, 1, 4, testcost)
+    >>> d == [1, 2, 4]
+    True
+
+    Using server values now
+    >>> import server
+    >>> e = least_cost_path(server.G, 277466945, 277466941, server.cost_distance)
+    >>> print(e)
+    [277466945, 277466943, 277466942, 277466941]
+
+    >>> f = least_cost_path(server.G, 354287616, 406847557, server.cost_distance)
+    >>> print(f)
+    
+
     """
     todo = {start: 0}
     visited = set()
     parent = {}
 
+    # Check if the start and dest are in the given graph
+    if not(start in G.vertices() and dest in G.vertices()):
+        return None
+
+    # If the vertices exist, check if a path exists between the two vertices:
+    if shortest_path(G, start, dest) == None:
+        return None
+    
+    # At this point, it is verified that a path eists between the two vertices:
     while todo and (dest not in visited):
         (cur, c) = min(todo.items(), key = lambda x: x[1])
         todo.pop(cur)
