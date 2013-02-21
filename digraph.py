@@ -93,6 +93,9 @@ class Digraph:
         display.write_dot_desc((self.vertices(), self.eges()), filename, attr)
 
     def num_edges(self):
+        """
+        Returns the number of edges in the graph.
+        """
         m = 0
         for v in self._tosets:
             m += len(self._tosets[v])
@@ -143,11 +146,48 @@ class Digraph:
         True
         >>> G.is_path([1, 5, 4, 2])
         False
+
+        >>> G.is_path([1, 1, 1, 1])
+        True
+        >>> G.is_path([5, 2, 5, 2, 5, 4, 5])
+        False
+        >>> G.is_path([5, 2, 5, 2, 5])
+        True
+        >>> G.is_path([5, 4, 2, 5, 1])
+        False
+        >>> G.is_path([])
+        False
+        >>> G.is_path([1])
+        True
+        >>> G.is_path('asdf')
+        False
+        >>> G.is_path(None)
+        False
+        >>> G.is_path(1)
+        False
         """
-        for i in range(len(path) - 1):
-            if path[i + 1] not in self._tosets[path[i]]:
-                return False
-        return True
+         # If not a valid list, return false
+        if type(path) != list:
+            return False
+
+        # If empty list, return false
+        if len(path) == 0:
+            return False
+        
+        # Attempts to see if there is an element in the path
+        # Sets first element as previous for base case
+        # Will always be previous cursor for every other case
+        # This makes a single point a valid path from itself to itself
+        prevertex = path[0]
+        value = False
+        for vertex in path:
+            if (vertex in self.adj_to(prevertex)) or (vertex == prevertex):
+                value = True
+                prevertex = vertex
+            else:
+                value = False
+                break
+        return value
 
 def random_graph(n, m):
     """
@@ -241,10 +281,7 @@ def least_cost_path(G, start, dest, cost):
     a real-valued cost.
 
     if there is no path, then returns None
-
     the path from start to start is [start]
-    G = digraph()
-    least_cost_path(G, 277466945, 277466945, 
 
     """
     todo = {start: 0}
