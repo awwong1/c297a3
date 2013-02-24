@@ -2,7 +2,9 @@ import digraph
 import readModule
 import sys
 
-debug = 1
+## TODO: After loading the Edmonton map data the server should only begin processing requests if it is running as the main program.
+
+debug = 0
 
 def cost_distance(e):
     """                                                                                   
@@ -31,7 +33,6 @@ def cost_distance(e):
 # load the Edmonton map data into a digraph object, and store the
 # ancillary information about street names and vertex locations
 (E, E_name, V, V_coord) = readModule.read_graph('edmonton-roads-digraph.txt')
-
 G = digraph.Digraph(E)
 
 while (debug == 0):
@@ -42,12 +43,15 @@ while (debug == 0):
     start = readModule.value_search(V_coord, float(start_lat), float(start_lon))
     dest = readModule.value_search(V_coord, float(dest_lat), float(dest_lon))
 
-## TODO: make sure start and dest are valid vertices
-
     # find least_cost_path
     path = digraph.least_cost_path(G, start, dest, cost_distance)
-    print(path)
-## TODO: print the path information correctly
+
+## TODO: print total distance
+
+    # print path in "lat lon" format
+    for vertex in path:
+        waypoint = V_coord[vertex]
+        print(str(waypoint[0]) + ' ' + str(waypoint[1]))
 
 if __name__ == "__main__":
     import doctest
