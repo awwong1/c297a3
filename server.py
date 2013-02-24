@@ -4,7 +4,7 @@ import sys
 
 ## TODO: After loading the Edmonton map data the server should only begin processing requests if it is running as the main program.
 
-debug = 0
+debug = 1
 
 def cost_distance(e):
     """                                                                                   
@@ -14,11 +14,15 @@ def cost_distance(e):
     e is defined as (start, stop)                                                        
     vertices start, stop are defined as (id: lat, long)
 
+    This function assumes that V_coord is already defined
+
     >>> a = 277466945
     >>> b = 277466941
     >>> c = (a,b)
     >>> print(cost_distance(c))
     0.002532184898450213
+
+    
 
     """
     start_coord = V_coord[e[0]]
@@ -29,6 +33,38 @@ def cost_distance(e):
     distance = (lat_diff + lon_diff)**.5
 
     return distance
+
+def total_distance(path, cost):
+    """
+    Total distance returns the sum of distances in a path.
+
+    Calculate the distance beteen vertices from current vertex to next vertex
+    Shift vertices over, continue until next vertex = end of path
+    Sum all distances together.
+    This situation uses the cost function defined above.
+    NOTE: This function assumes that the list of vertices provided is a valid path
+
+    >>> expected = total_distance([277466945, 277466943, 277466942, 277466941], cost_distance)
+    >>> a = cost_distance((277466945, 277466943))
+    >>> b = cost_distance((277466943, 277466942))
+    >>> c = cost_distance((277466942, 277466941))
+    >>> expected == a+b+c
+    True
+    """
+    totaldistance = 0
+    curver = None
+    prever = None
+    for i in path:
+        curver = i
+        if prever == None:
+            prever = i
+            # Notice, the distance from a vertex to itself is 0.0
+            # This will only occur for the first iteration
+        totaldistance += cost((prever, curver))
+        prever = curver
+
+    return totaldistance
+
 
 # load the Edmonton map data into a digraph object, and store the
 # ancillary information about street names and vertex locations
@@ -46,7 +82,8 @@ while (debug == 0):
     # find least_cost_path
     path = digraph.least_cost_path(G, start, dest, cost_distance)
 
-## TODO: print total distance
+    # TODO: print total distance
+    print(total_distance(path))
 
     # print path in "lat lon" format
     for vertex in path:
