@@ -66,9 +66,23 @@ def value_search(V_coord, lat, lon):
     >>> value_search(V_coord, 3, 2) == 1
     True
 
+    >>> print(value_search(V_coord, 1000, 1000))
+    3
+
+    >>> print(value_search(V_coord, -1000, -1000))
+    1
+
+    >>> S_coord = {1: (14, 12), 2: (12, 14)}
+    >>> value_search(S_coord, 11, 11) == 1
+    True
+    
+    >>> T_coord = {1: (12, 14), 2: (14, 12)}
+    >>> value_search(T_coord, 11, 11) == 1
+    True
+
     """
     key = 0
-    minimum = 1000
+    minimum = float("inf")
 
     # finds lat/lon if in V_coord
     for k,v in V_coord.items():
@@ -84,3 +98,8 @@ def value_search(V_coord, lat, lon):
                 key = k
 
     return key
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
