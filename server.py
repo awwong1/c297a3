@@ -64,10 +64,19 @@ def total_distance(path, cost):
 
     return totaldistance
 
+# throw away executable name before processing command line arguments
+argv = sys.argv[1:]
+
+# if filename is supplied, use that, otherwise use stdin
+if argv:
+    digraph_file_name = argv.pop(0)
+    digraph_file = open(digraph_file_name, 'r')
+else:
+    digraph_file = 'edmonton-roads-2.0.1.txt'
 
 # load the Edmonton map data into a digraph object, and store the
 # ancillary information about street names and vertex locations
-(E, E_name, V, V_coord) = readModule.read_graph('edmonton-roads-2.0.1.txt')
+(E, E_name, V, V_coord) = readModule.read_graph(digraph_file)
 G = digraph.Digraph(E)
 
 if __name__ == "__main__":
