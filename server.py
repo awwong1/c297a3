@@ -51,6 +51,10 @@ def total_distance(path, cost):
     >>> expected == a+b+c
     True
     """
+
+    if path is None:
+        return 0
+
     totaldistance = 0
     curver = None
     prever = None
@@ -86,9 +90,10 @@ while (debug == 0):
     print(total_distance(path, cost_distance))
 
     # print path in "lat lon" format
-    for vertex in path:
-        waypoint = V_coord[vertex]
-        print(str(waypoint[0]) + ' ' + str(waypoint[1]))
+    if path is not None:
+        for vertex in path:
+            waypoint = V_coord[vertex]
+            print(str(waypoint[0]) + ' ' + str(waypoint[1]))
 
 if __name__ == "__main__":
     import doctest

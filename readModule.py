@@ -60,7 +60,7 @@ def value_search(V_coord, lat, lon):
     """
     reverse dictionary lookup - finds the key given value
     if no key exists, returns nearest key as defined by cost function
-    >>> V_coord = {1: (2,2), 2:(3,4), 3:(6,2)}
+    >>> V_coord = {1: (2,2), 2:(3,4), 3:(6,2), 4:(53, -113)}
     >>> value_search(V_coord, 3, 4) == 2
     True
     >>> value_search(V_coord, 3, 2) == 1
@@ -70,7 +70,7 @@ def value_search(V_coord, lat, lon):
     3
 
     >>> print(value_search(V_coord, -1000, -1000))
-    1
+    4
 
     >>> S_coord = {1: (14, 12), 2: (12, 14)}
     >>> value_search(S_coord, 11, 11) == 1
