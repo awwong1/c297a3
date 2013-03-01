@@ -1,10 +1,7 @@
 import digraph
 import readModule
+import dijkstra
 import sys
-
-## TODO: After loading the Edmonton map data the server should only begin processing requests if it is running as the main program.
-
-debug = 0
 
 def cost_distance(e):
     """                                                                                   
@@ -21,8 +18,6 @@ def cost_distance(e):
     >>> c = (a,b)
     >>> print(cost_distance(c))
     0.002532184898450213
-
-    
 
     """
     start_coord = V_coord[e[0]]
@@ -72,29 +67,30 @@ def total_distance(path, cost):
 
 # load the Edmonton map data into a digraph object, and store the
 # ancillary information about street names and vertex locations
-(E, E_name, V, V_coord) = readModule.read_graph('edmonton-roads-digraph.txt')
+(E, E_name, V, V_coord) = readModule.read_graph('edmonton-roads-2.0.1.txt')
 G = digraph.Digraph(E)
 
-while (debug == 0):
-    # look for input of lat/lon
-    (start_lat, start_lon, dest_lat, dest_lon) = input("lat1 lon1 lat2 lon2: ").split(' ')
-
-    # find vertex associated with lat/lon
-    start = readModule.value_search(V_coord, float(start_lat), float(start_lon))
-    dest = readModule.value_search(V_coord, float(dest_lat), float(dest_lon))
-
-    # find least_cost_path
-    path = digraph.least_cost_path(G, start, dest, cost_distance)
-
-    # TODO: print total distance
-    print(total_distance(path, cost_distance))
-
-    # print path in "lat lon" format
-    if path is not None:
-        for vertex in path:
-            waypoint = V_coord[vertex]
-            print(str(waypoint[0]) + ' ' + str(waypoint[1]))
-
 if __name__ == "__main__":
+    while True:
+        # look for input of lat/lon
+        (start_lat, start_lon, dest_lat, dest_lon) = input(
+            "lat1 lon1 lat2 lon2: ").split(' ')
+
+        # find vertex associated with lat/lon
+        start = readModule.value_search(V_coord, float(start_lat), float(start_lon))
+        dest = readModule.value_search(V_coord, float(dest_lat), float(dest_lon))
+
+        # find least_cost_path
+        path = dijkstra.least_cost_path(G, start, dest, cost_distance)
+        
+        print(total_distance(path, cost_distance))
+
+        # print path in "lat lon" format
+        if path is not None:
+            for vertex in path:
+                waypoint = V_coord[vertex]
+                print(str(waypoint[0]) + ' ' + str(waypoint[1]))
+
+
     import doctest
     doctest.testmod()
