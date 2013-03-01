@@ -4,7 +4,7 @@ import sys
 
 ## TODO: After loading the Edmonton map data the server should only begin processing requests if it is running as the main program.
 
-debug = 1
+debug = 0
 
 def cost_distance(e):
     """                                                                                   
@@ -83,7 +83,7 @@ while (debug == 0):
     path = digraph.least_cost_path(G, start, dest, cost_distance)
 
     # TODO: print total distance
-    print(total_distance(path))
+    print(total_distance(path, cost_distance))
 
     # print path in "lat lon" format
     for vertex in path:
