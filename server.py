@@ -77,8 +77,8 @@ if __name__ == "__main__":
             "lat1 lon1 lat2 lon2: ").split(' ')
 
         # find vertex associated with lat/lon
-        start = readModule.value_search(V_coord, float(start_lat), float(start_lon))
-        dest = readModule.value_search(V_coord, float(dest_lat), float(dest_lon))
+        start = readModule.value_search(V_coord, int(start_lat), int(start_lon))
+        dest = readModule.value_search(V_coord, int(dest_lat), int(dest_lon))
 
         # find least_cost_path
         path = dijkstra.least_cost_path(G, start, dest, cost_distance)

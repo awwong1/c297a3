@@ -47,9 +47,6 @@ def least_cost_path(G, start, dest, cost):
     >>> print(e)
     [277466945, 277466943, 277466942, 277466941]
 
-    >>> f = least_cost_path(server.G, 354287616, 406847557, server.cost_distance)
-    >>> print(f)
-
     """
 
     # todo[v] is the current best estimate of cost to get from start to v 

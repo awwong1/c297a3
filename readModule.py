@@ -24,12 +24,12 @@ def read_graph(digraph_file_name):
             # vertex id's should be ints
             id=int(id)
 
-            # lat and long are floats
+            # lat and long are ints
             lat=float(lat)
             long=float(long)
 
             V.add(id)
-            V_coord[id] = (lat,long)
+            V_coord[id] = (int(lat*100000), int(long*1000040))
         
         elif type == 'E':
             # got an edge record
