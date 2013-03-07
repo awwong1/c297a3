@@ -291,7 +291,10 @@ void loop() {
                         }
                 #endif
                 update_display_window = 1;
-                }
+		if ( path_length > 0 ) {
+		  draw_path(path_length, path);
+		}
+	    }
             else {
                 // should display this error on the screen
                 Serial.print("Path read error, code ");

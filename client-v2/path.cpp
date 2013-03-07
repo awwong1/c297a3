@@ -117,11 +117,15 @@ uint8_t is_coord_visible(coord_t point) {
     }
 
 void draw_path(uint16_t length, coord_t path[]) {
-
-    while ( 0 ) {
-
-        // if current and prev points are visible then draw a line
-        // tft.drawLine(prev_x, prev_y, cur_x, cur_y, BLUE);
-
-        }
+  uint16_t point_map_x0, point_map_y0, point_map_x1, point_map_y1;
+  for (int i = 0; i<length-1; i++) {
+    if (is_coord_visible(path[i]) && is_coord_visible(path[i+1])) {
+      point_map_y0 = latitude_to_y(current_map_num, path[i].lat);
+      point_map_x0 = longitude_to_x(current_map_num, path[i].lon);
+      point_map_y1 = latitude_to_y(current_map_num, path[i+1].lat);
+      point_map_x1 = longitude_to_x(current_map_num, path[i+1].lon);
     }
+    tft.drawLine(point_map_x0 - screen_map_x, point_map_y0 - screen_map_y, 
+		 point_map_x1 - screen_map_x, point_map_y1 - screen_map_y, RED);
+  }
+}
