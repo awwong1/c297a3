@@ -6,7 +6,7 @@
 #include "map.h"
 #include "serial_handling.h"
 
-#define DEBUG_PATH
+//#define DEBUG_PATH
 
 /* path routine error code
    0 no error

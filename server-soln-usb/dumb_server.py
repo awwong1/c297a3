@@ -3,7 +3,7 @@ import serial
 import argparse
 
 global debug
-debug = False
+debug = True
 
 def main():
     args = parse_args()
@@ -24,11 +24,8 @@ def main():
     idx = 0
     while True:
         msg = receive(serial_in)
-
         debug and print("GOT:" + msg + ":", file=sys.stderr)
-
         fields = msg.split(" ");
-
         if len(fields) == 4:
             send(serial_out, "2")
             send(serial_out, fields[0]+" "+fields[1])
@@ -54,11 +51,8 @@ def receive(serial_port, timeout=None):
     milliseconds.
     """
     raw_message = serial_port.readline()
-
     debug and print("client:", raw_message, ":")
-
     message = raw_message.decode('ascii')
-
     return message.rstrip("\n\r")
 
 
@@ -87,7 +81,6 @@ def parse_args():
                         help='path to graph (DEFAULT = " edmonton-roads-2.0.1.txt")',
                         dest='graphname',
                         default=' edmonton-roads-2.0.1.txt')
-
     return parser.parse_args()
 
 if __name__ == '__main__':

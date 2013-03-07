@@ -29,7 +29,7 @@ def read_graph(digraph_file_name):
             long=float(long)
 
             V.add(id)
-            V_coord[id] = (int(lat*100000), int(long*1000040))
+            V_coord[id] = (int(lat*100000), int(long*100000))
         
         elif type == 'E':
             # got an edge record
